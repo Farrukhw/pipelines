@@ -1,0 +1,36 @@
+pipeline {
+   agent any
+
+   stages {
+      stage('Hello') {
+         steps {
+            bat 'echo "Hello World"'
+         }
+      }
+      
+      stage('test') {
+          steps {
+              script {
+                try {
+                    bat 'this should fail exit(1)'
+                    bat 'echo current build status: ${currentBuild.result}'
+                    bat label: '', returnStdout: true, script: 'echo $[currentBuild.result}'
+                    echo 'Succeeded!'
+                } catch (err) {
+                    echo "Failed: ${err}"
+                    echo "Error Message: '${err.message}"
+                    currentBuild.result='FAILED'
+                } 
+
+              }
+                echo "current build status: ${currentBuild.result}"
+                //OR
+                
+                echo "current build status: ${currentBuild.currentResult}"
+                //bat label: '', returnStdout: true, script: '$[currentBuild.result}'
+
+          }
+      }
+   }
+}
+
