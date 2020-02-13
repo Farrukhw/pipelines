@@ -31,6 +31,18 @@ pipeline {
 
           }
       }
+      
+      stage('Another step') {
+          //This stage would be skilled if currentBuid.result is not SUCCESS
+          when {
+              expression { currentBuild.result =='SUCCESS' }
+          }
+          steps {
+            echo "Build state is now : ${currentBuild.result}"    
+          }  
+          
+          
+      }
    }
 }
 
